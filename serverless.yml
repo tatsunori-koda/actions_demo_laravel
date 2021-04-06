@@ -25,9 +25,9 @@ functions:
     events:
       - http: 'ANY /'
       - http: 'ANY /{proxy+}'
-#  artisan:
-#    handler: artisan
-#    timeout: 120 # in seconds
-#    layers:
-#      - ${bref:layer.php-73} # PHP
-#      - ${bref:layer.console} # The "console" layer
+  artisan:
+    handler: artisan
+    timeout: 120 # in seconds
+    layers:
+      - ${bref:layer.php-73} # PHP
+      - ${bref:layer.console} # The "console" layer
