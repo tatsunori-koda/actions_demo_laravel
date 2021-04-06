@@ -25,6 +25,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: composer install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          composer install -n --prefer-dist
+          composer require bref/bref
+          
+      - name: Copy .env
+        run: cp .env.deploy .env
+      - name: generate key
+        run: php artisan key:generate
+
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -34,13 +45,6 @@ jobs:
         run: |
           npm install serverless -g
           npm install
-          composer require bref/bref
-          composer install
-
-      - name: Copy .env
-        run: cp .env.deploy .env
-      - name: generate key
-        run: php artisan key:generate
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
