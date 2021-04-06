@@ -35,6 +35,12 @@ jobs:
           npm install serverless -g
           npm install
           composer require bref/bref
+          composer install
+
+      - name: Copy .env
+        run: cp .env.deploy .env
+      - name: generate key
+        run: php artisan key:generate
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
