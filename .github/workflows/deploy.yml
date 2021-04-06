@@ -28,6 +28,7 @@ jobs:
       - name: composer install
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          rm composer.lock
           composer install -n --prefer-dist
           composer require bref/bref
           
