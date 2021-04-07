@@ -3,7 +3,7 @@ service: laravel-demo
 provider:
   name: aws
   region: ap-northeast-1
-  stage: dev
+  # stage: dev
   runtime: provided.al2
 
 plugins:
