@@ -36,6 +36,8 @@ jobs:
         run: cp .env.deploy .env
       - name: generate key
         run: php artisan key:generate
+      - name: cache clear
+        run: php artisan cache:clear && php artisan route:clear
 
       - name: Setup Node.js
         uses: actions/setup-node@v1
