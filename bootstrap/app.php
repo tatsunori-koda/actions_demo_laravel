@@ -15,6 +15,9 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+// Serverlessで追加
+$app->useStoragePath($_ENV['APP_STORAGE'] ?? $app->storagePath());
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
