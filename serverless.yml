@@ -23,8 +23,18 @@ functions:
     layers:
       - ${bref:layer.php-73-fpm}
     events:
-      - http: 'ANY /'
-      - http: 'ANY /{proxy+}'
+      # - http: 'ANY /'
+      # - http: 'ANY /{proxy+}'
+      - http:
+          path: test
+          method: get
+          authorizer:
+            name: auth
+            resultTtlInSeconds: 0
+            type: request
+  auth:
+    handler: handler.auth
+
   artisan:
     handler: artisan
     timeout: 120 # in seconds
