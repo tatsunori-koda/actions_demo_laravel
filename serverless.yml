@@ -23,15 +23,16 @@ functions:
     layers:
       - ${bref:layer.php-73-fpm}
     events:
-      - http: 'ANY /'
-      - http: 'ANY /{proxy+}'
-      # - http:
-      #     path: test
-      #     method: get
-      #     authorizer:
-      #       name: auth
-      #       resultTtlInSeconds: 0
-      #       type: request
+      # - http: 'ANY /'
+      # - http: 'ANY /{proxy+}'
+      - http: 
+          path: 'ANY /'
+          # path: test
+          # method: get
+          authorizer:
+            name: auth
+            resultTtlInSeconds: 0
+            type: request
   auth:
     handler: handler.auth
 
