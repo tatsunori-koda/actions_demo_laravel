@@ -38,7 +38,7 @@ return [
         'stack' => [
             'driver' => 'stack',
             // 'channels' => ['single'],
-            'channels' => ['stderr'],
+            'channels' => ['stderr'],   // serverless対応
             'ignore_exceptions' => false,
         ],
 
