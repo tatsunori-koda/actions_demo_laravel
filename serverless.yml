@@ -28,10 +28,10 @@ functions:
       - http:
           path: test
           method: get
-          authorizer:
-            name: auth
-            resultTtlInSeconds: 0
-            type: request
+          # authorizer:
+          #   name: auth
+          #   resultTtlInSeconds: 0
+          #   type: request
   auth:
     handler: handler.auth
 
