@@ -26,8 +26,8 @@ functions:
       # - http: 'ANY /'
       # - http: 'ANY /{proxy+}'
       - http:
-          path: /
-          method: ANY
+          path: '/'
+          method: any
           authorizer:
             name: auth
             resultTtlInSeconds: 0
@@ -45,6 +45,8 @@ functions:
 #    environment:
 #      variable2: value2
 
+# APIGateWayにオーソライザーを設定
+# オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
 resources:
   Resources:
     GatewayResponse:
