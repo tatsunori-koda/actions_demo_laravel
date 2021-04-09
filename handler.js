@@ -10,27 +10,25 @@ module.exports.auth = (event, context, callback) => {
     var username = plainCreds[0]
     var password = plainCreds[1]
 
-    if (!(username === 'admin' && password === 'password')) return callback('Unauthorized')
+    // if (!(username === 'admin' && password === 'password')) return callback('Unauthorized')
+    if (!(username === 'admin' && password === 'password')) {
+      const body = 'Unauthorized';
+        const response = {
+            status: '401',
+            statusDescription: 'Unauthorized',
+            body: body,
+            headers: {
+                'www-authenticate': [{key: 'WWW-Authenticate', value:'Basic'}]
+            },
+        };
+        callback(null, response);
+    }
+    callback(null, request);
 
-    var authResponse = buildAllowAllPolicy(event, username)
+    // var authResponse = buildAllowAllPolicy(event, username)
 
-    callback(null, authResponse)
+    // callback(null, authResponse)
 
-    // if (username === 'admin' && password === 'password') {
-    //     callback(null, {
-    //         principalId: 'user',
-    //         policyDocument: {
-    //             Version: '2012-10-17',
-    //             Statement: [{
-    //                 Action: 'execute-api:Invoke',
-    //                 Effect: 'Allow',
-    //                 Resource: "*",
-    //             }]
-    //         }
-    //     });
-    // } else {
-    //     callback('Unauthorized');
-    // }
 };
 
 function buildAllowAllPolicy (event, principalId) {
@@ -42,7 +40,8 @@ function buildAllowAllPolicy (event, principalId) {
         {
           Action: 'execute-api:Invoke',
           Effect: 'Allow',
-          Resource: event.methodArn
+          Resource: "*",
+          // Resource: event.methodArn
         }
       ]
     }
