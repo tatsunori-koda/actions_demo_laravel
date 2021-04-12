@@ -43,7 +43,7 @@ functions:
           path: '/'
           method: any
           # Lambdaオーソライザーの設定
-          authorizer: ${self:custom.definitions.authorizer}
+          #authorizer: ${self:custom.definitions.authorizer}
           # authorizer:
           #   name: auth
           #   resultTtlInSeconds: 0
