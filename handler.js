@@ -1,18 +1,23 @@
 'use strict';
 
 module.exports.auth = (event, context, callback) => {
-    let Authorization = event.headers.Authorization;
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify('Hello from Lambda!'),
+  };
+  return response;
+    // let Authorization = event.headers.Authorization;
 
-    if (!Authorization) return callback('Unauthorized');
+    // if (!Authorization) return callback('Unauthorized');
 
-    var encodedCreds = authorizationHeader.split(" ")[1]
-    var plainCreds = (new Buffer(encodedCreds, 'base64')).toString().split(':')
-    var username = plainCreds[0]
-    var password = plainCreds[1]
+    // var encodedCreds = authorizationHeader.split(" ")[1]
+    // var plainCreds = (new Buffer(encodedCreds, 'base64')).toString().split(':')
+    // var username = plainCreds[0]
+    // var password = plainCreds[1]
 
-    if (!(username === 'admin' && password === 'password')) return callback('Unauthorized')
-    var authResponse = buildAllowAllPolicy(event, username)
-    callback(null, authResponse)
+    // if (!(username === 'admin' && password === 'password')) return callback('Unauthorized')
+    // var authResponse = buildAllowAllPolicy(event, username)
+    // callback(null, authResponse)
 
     /*
     if (!(username === 'admin' && password === 'password')) {
