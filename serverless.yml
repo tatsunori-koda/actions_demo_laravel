@@ -16,7 +16,7 @@ package:
     - storage/**
     - tests/**
 
-# オーソライザー用に追加　
+# 変数定義：オーソライザー用に追加　
 custom:
   definitions:
     authorizer:
@@ -31,7 +31,8 @@ custom:
 
 functions:
   website:
-    handler: public/index.php
+    # handler: public/index.php
+    handler: app.handler
     timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
     layers:
       - ${bref:layer.php-73-fpm}
@@ -47,8 +48,8 @@ functions:
           #   name: auth
           #   resultTtlInSeconds: 0
           #   type: request
-  auth:
-    handler: handler.auth
+  # auth:
+  #   handler: handler.auth
   authorizer:
     handler: authorizer.handler
 
@@ -64,6 +65,7 @@ functions:
 
 # APIGateWayにオーソライザーを設定
 # オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
+# AWSリソースの設定
 resources:
   Resources:
     GatewayResponse:
