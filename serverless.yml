@@ -16,6 +16,19 @@ package:
     - storage/**
     - tests/**
 
+# オーソライザー用に追加　
+custom:
+  definitions:
+    authorizer:
+      # Lambda関数名
+      name: authorizer
+      # キャッシュ時間
+      resultTtlInSeconds: 0
+      # Lambda関数に渡すヘッダー名
+      identitySource: method.request.header.Authorization
+      # Lambdaイベントペイロード
+      type: request
+
 functions:
   website:
     handler: public/index.php
@@ -28,12 +41,16 @@ functions:
       - http:
           path: '/'
           method: any
-          authorizer:
-            name: auth
-            resultTtlInSeconds: 0
-            type: request
+          # Lambdaオーソライザーの設定
+          authorizer: ${self:custom.definitions.authorizer}
+          # authorizer:
+          #   name: auth
+          #   resultTtlInSeconds: 0
+          #   type: request
   auth:
     handler: handler.auth
+  authorizer:
+    handler: authorizer.handler
 
   artisan:
     handler: artisan
