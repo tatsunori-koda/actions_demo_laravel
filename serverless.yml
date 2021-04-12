@@ -1,82 +1,18 @@
-service: laravel-demo
+service: lambda-authorizer-serverless
 
 provider:
   name: aws
+  runtime: nodejs10.x
   region: ap-northeast-1
-  stage: dev
-  runtime: provided.al2
-
-plugins:
-  - ./vendor/bref/bref
-
-package:
-  exclude:
-    - node_modules/**
-    - public/storage
-    - storage/**
-    - tests/**
-
-# 変数定義：オーソライザー用に追加　
-custom:
-  definitions:
-    authorizer:
-      # Lambda関数名
-      name: authorizer
-      # キャッシュ時間
-      resultTtlInSeconds: 0
-      # Lambda関数に渡すヘッダー名
-      identitySource: method.request.header.Authorization
-      # Lambdaイベントペイロード
-      type: request
+  stg: ${opt:stage}
 
 functions:
-  website:
-    # handler: public/index.php
+  app:
     handler: app.handler
-    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
-    layers:
-      - ${bref:layer.php-73-fpm}
     events:
-      # - http: 'ANY /'
-      # - http: 'ANY /{proxy+}'
       - http:
           path: '/'
           method: any
       - http:
           path: '{proxy+}'
           method: any
-          # Lambdaオーソライザーの設定
-          #authorizer: ${self:custom.definitions.authorizer}
-          # authorizer:
-          #   name: auth
-          #   resultTtlInSeconds: 0
-          #   type: request
-  # auth:
-  #   handler: handler.auth
-  authorizer:
-    handler: authorizer.handler
-
-  artisan:
-    handler: artisan
-    timeout: 120 # in seconds
-    layers:
-      - ${bref:layer.php-73} # PHP
-      - ${bref:layer.console} # The "console" layer
-
-#    environment:
-#      variable2: value2
-
-# APIGateWayにオーソライザーを設定
-# オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
-# AWSリソースの設定
-resources:
-  Resources:
-    GatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.WWW-Authenticate: "'Basic'"
-        ResponseType: UNAUTHORIZED
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
