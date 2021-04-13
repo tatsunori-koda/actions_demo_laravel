@@ -6,6 +6,18 @@ provider:
   region: ap-northeast-1
   stg: ${opt:stage}
 
+custom:
+  definitions:
+    authorizer:
+      # Lambda関数名
+      name: authorizer
+      # キャッシュ時間
+      resultTtlInSeconds: 0
+      # Lambda関数に渡すヘッダー名
+      identitySource: method.request.header.Authorization
+      # Lambdaイベントペイロード
+      type: request
+
 functions:
   app:
     handler: handler.hello
@@ -13,6 +25,26 @@ functions:
       - http:
           path: '/'
           method: any
+          # Lambdaオーソライザーの設定
+          authorizer: ${self:custom.definitions.authorizer}
       - http:
           path: '{proxy+}'
           method: any
+          # Lambdaオーソライザーの設定
+          authorizer: ${self:custom.definitions.authorizer}
+  # Lambda関数 (authorizer) のhandlerメソッドの指定
+  authorizer:
+    handler: authorizer.handler
+
+resources:
+  Resources:
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+
