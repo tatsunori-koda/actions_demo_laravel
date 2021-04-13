@@ -1,10 +1,10 @@
-service: laravel-basic
+service: laravel-demo
 
 provider:
   name: aws
-  runtime: nodejs10.x
   region: ap-northeast-1
-  stg: ${opt:stage}
+  stage: dev
+  runtime: provided.al2
 
 plugins:
   - ./vendor/bref/bref
@@ -30,9 +30,9 @@ custom:
       type: request
 
 functions:
-  app:
-    handler: public/index.php
-    # handler: handler.hello
+  website:
+    # handler: public/index.php
+    handler: handler.hello
     timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
     layers:
       - ${bref:layer.php-73-fpm}
@@ -43,13 +43,8 @@ functions:
           path: '/'
           method: any
           # Lambdaオーソライザーの設定
-          # authorizer: ${self:custom.definitions.authorizer}
-          # authorizer:
-          #   name: auth
-          #   resultTtlInSeconds: 0
-          #   type: request
-  # auth:
-  #   handler: handler.auth
+          #authorizer: ${self:custom.definitions.authorizer}
+
   authorizer:
     handler: authorizer.handler
 
@@ -60,12 +55,8 @@ functions:
       - ${bref:layer.php-73} # PHP
       - ${bref:layer.console} # The "console" layer
 
-#    environment:
-#      variable2: value2
-
-# APIGateWayにオーソライザーを設定
+# [AWSリソースの設定]APIGateWayにオーソライザーを設定
 # オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
-# AWSリソースの設定
 resources:
   Resources:
     GatewayResponse:
