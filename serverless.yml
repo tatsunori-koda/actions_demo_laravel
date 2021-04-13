@@ -52,7 +52,7 @@ functions:
           path: '/'
           method: any
           # Lambdaオーソライザーの設定
-          # authorizer: ${self:custom.definitions.authorizer}
+          authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
     runtime: nodejs10.x
