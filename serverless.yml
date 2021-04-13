@@ -31,8 +31,8 @@ custom:
 
 functions:
   app:
-    # handler: public/index.php
-    handler: handler.hello
+    handler: public/index.php
+    # handler: handler.hello
     timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
     layers:
       - ${bref:layer.php-73-fpm}
