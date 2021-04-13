@@ -1,15 +1,18 @@
 service: laravel-demo
 
-provider:
-  name: aws
-  region: ap-northeast-1
-  stage: dev
-  runtime: provided.al2
+# laravel用のphpを動かすruntimeはこちら
 # provider:
 #   name: aws
-#   runtime: nodejs10.x
 #   region: ap-northeast-1
-#   stg: ${opt:stage}
+#   stage: dev
+#   runtime: provided.al2
+
+# オーソライザーはこちらで動く
+provider:
+  name: aws
+  # runtime: nodejs10.x
+  region: ap-northeast-1
+  stg: ${opt:stage}
 
 plugins:
   - ./vendor/bref/bref
@@ -36,6 +39,7 @@ custom:
 
 functions:
   website:
+    runtime: provided.al2
     handler: public/index.php
     # handler: handler.hello
     timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
@@ -51,6 +55,7 @@ functions:
           # authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
+    runtime: nodejs10.x
     handler: authorizer.handler
 
   artisan:
