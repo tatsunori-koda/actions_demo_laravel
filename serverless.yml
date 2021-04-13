@@ -1,10 +1,15 @@
 service: laravel-demo
 
+# provider:
+#   name: aws
+#   region: ap-northeast-1
+#   stage: dev
+#   runtime: provided.al2
 provider:
   name: aws
+  runtime: nodejs10.x
   region: ap-northeast-1
-  stage: dev
-  runtime: provided.al2
+  stg: ${opt:stage}
 
 plugins:
   - ./vendor/bref/bref
