@@ -30,7 +30,7 @@ custom:
   definitions:
     authorizer:
       # Lambda関数名
-      name: authorizer2
+      name: authorizer
       # キャッシュ時間
       resultTtlInSeconds: 0
       # Lambda関数に渡すヘッダー名
