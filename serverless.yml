@@ -80,11 +80,11 @@ functions:
     handler: authorizer.handler
 
   artisan:
-    handler: artisan
-    timeout: 120 # in seconds
-    layers:
-      - ${bref:layer.php-73} # PHP
-      - ${bref:layer.console} # The "console" layer
+    # handler: artisan
+    # timeout: 120 # in seconds
+    # layers:
+    #   - ${bref:layer.php-73} # PHP
+    #   - ${bref:layer.console} # The "console" layer
 
 # [AWSリソースの設定]APIGateWayにオーソライザーを設定
 # オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
