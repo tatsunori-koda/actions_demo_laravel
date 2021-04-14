@@ -29,14 +29,28 @@ package:
 custom:
   definitions:
     authorizer:
-      # Lambda関数名
-      name: authorizer
-      # キャッシュ時間
-      resultTtlInSeconds: 0
-      # Lambda関数に渡すヘッダー名
-      identitySource: method.request.header.Authorization
-      # Lambdaイベントペイロード
-      type: request
+      # # Lambda関数名
+      # name: authorizer
+      # # キャッシュ時間
+      # resultTtlInSeconds: 0
+      # # Lambda関数に渡すヘッダー名
+      # identitySource: method.request.header.Authorization
+      # # Lambdaイベントペイロード
+      # type: request
+
+      # ${file}はyaml or json
+      serverlessIfElse:
+        - If: '"${file(./development.yml):app_dev}" == "local"'
+          Set:
+            # Lambdaオーソライザーの設定
+            # Lambda関数名（functionsのnameと一致させる必要あり）
+            name: authorizer
+            # キャッシュ時間
+            resultTtlInSeconds: 0
+            # Lambda関数に渡すヘッダー名
+            identitySource: method.request.header.Authorization
+            # Lambdaイベントペイロード
+            type: request
 
 functions:
   website:
@@ -53,12 +67,6 @@ functions:
           path: '/'
           method: any
           authorizer: ${self:custom.definitions.authorizer}
-          # # ${file}はyaml or json
-          # serverlessIfElse:
-          #   - If: '"${file(./development.yml):app_dev}" == "local"'
-          #     Set:
-          #       # Lambdaオーソライザーの設定
-          #       authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
     runtime: nodejs10.x
