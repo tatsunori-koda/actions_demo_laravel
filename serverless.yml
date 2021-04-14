@@ -16,6 +16,7 @@ provider:
 
 plugins:
   - ./vendor/bref/bref
+  - serverless-plugin-ifelse
 
 package:
   exclude:
@@ -51,8 +52,12 @@ functions:
       - http:
           path: '/'
           method: any
-          # Lambdaオーソライザーの設定
-          authorizer: ${self:custom.definitions.authorizer}
+          
+          serverlessIfElse:
+            - If: '"${env:APP_ENV}" == "local"'
+              Set:
+                # Lambdaオーソライザーの設定
+                authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
     runtime: nodejs10.x
