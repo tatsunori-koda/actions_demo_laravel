@@ -55,7 +55,7 @@ functions:
           
           # ${file}はyaml or json
           serverlessIfElse:
-            - If: '"${file(./development.yml):app_dev}" == "local"'
+            - If: '"${file(./development.yml):app_dev}" != "local"'
               Set:
                 # Lambdaオーソライザーの設定
                 authorizer: ${self:custom.definitions.authorizer}
