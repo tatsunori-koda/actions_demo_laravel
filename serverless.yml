@@ -52,13 +52,13 @@ functions:
       - http:
           path: '/'
           method: any
-          
-          # ${file}はyaml or json
-          serverlessIfElse:
-            - If: '"${file(./development.yml):app_dev2}" == "local"'
-              Set:
-                # Lambdaオーソライザーの設定
-                authorizer: ${self:custom.definitions.authorizer}
+          authorizer: ${self:custom.definitions.authorizer}
+          # # ${file}はyaml or json
+          # serverlessIfElse:
+          #   - If: '"${file(./development.yml):app_dev}" == "local"'
+          #     Set:
+          #       # Lambdaオーソライザーの設定
+          #       authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
     runtime: nodejs10.x
