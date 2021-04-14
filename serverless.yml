@@ -51,7 +51,7 @@ custom:
             identitySource: method.request.header.Authorization
             # Lambdaイベントペイロード
             type: request
-          Else Set:
+          ElseSet:
             # 何もしない。とりあえずartisan
             name: artisan
 
