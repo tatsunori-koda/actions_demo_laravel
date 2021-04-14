@@ -49,7 +49,7 @@ custom:
   #         name: artisan
   definitions:
     authorizer:
-      # Lambda関数名
+      # Lambda関数名（basic認証しない時はauthorizer以外を指定し、同じ名前のファンクションを用意する）
       name: ${file(./development.yml):app_dev}
       # name: authorizer
       # キャッシュ時間
