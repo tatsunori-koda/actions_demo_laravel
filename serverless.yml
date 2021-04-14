@@ -28,7 +28,27 @@ package:
 # 変数定義：オーソライザー用に追加　
 custom:
   definitions:
-    authorizer:
+  # authorizer:
+  # ${file}はyaml or json
+  serverlessIfElse:
+    - If: '"${file(./development.yml):app_dev}" == "local"'
+      Set:
+        authorizer:
+          # Lambdaオーソライザーの設定
+          # Lambda関数名（functionsのnameと一致させる必要あり）
+          name: authorizer
+          # キャッシュ時間
+          resultTtlInSeconds: 0
+          # Lambda関数に渡すヘッダー名
+          identitySource: method.request.header.Authorization
+          # Lambdaイベントペイロード
+          type: request
+      ElseSet:
+        authorizer:
+          # 何もしない。とりあえずartisan
+          name: artisan
+  # definitions:
+  #   authorizer:
       # # Lambda関数名
       # name: authorizer
       # # キャッシュ時間
@@ -37,23 +57,6 @@ custom:
       # identitySource: method.request.header.Authorization
       # # Lambdaイベントペイロード
       # type: request
-
-      # ${file}はyaml or json
-      serverlessIfElse:
-        - If: '"${file(./development.yml):app_dev}" == "local"'
-          Set:
-            # Lambdaオーソライザーの設定
-            # Lambda関数名（functionsのnameと一致させる必要あり）
-            name: authorizer
-            # キャッシュ時間
-            resultTtlInSeconds: 0
-            # Lambda関数に渡すヘッダー名
-            identitySource: method.request.header.Authorization
-            # Lambdaイベントペイロード
-            type: request
-          ElseSet:
-            # 何もしない。とりあえずartisan
-            name: artisan
 
 functions:
   website:
