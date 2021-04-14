@@ -54,7 +54,7 @@ functions:
           method: any
           
           serverlessIfElse:
-            - If: '"${env:APP_ENV}" == "local"'
+            - If: '"${file(.env):APP_ENV}" == "local"'
               Set:
                 # Lambdaオーソライザーの設定
                 authorizer: ${self:custom.definitions.authorizer}
