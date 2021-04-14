@@ -53,8 +53,9 @@ functions:
           path: '/'
           method: any
           
+          # ${file}はyaml or json
           serverlessIfElse:
-            - If: '"${file(./.env.deploy):APP_ENV}" == "local"'
+            - If: '"${file(./development.yml):app_dev}" == "local"'
               Set:
                 # Lambdaオーソライザーの設定
                 authorizer: ${self:custom.definitions.authorizer}
