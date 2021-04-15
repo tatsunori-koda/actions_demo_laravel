@@ -1,5 +1,6 @@
 // Authorizationをせずに通過させる
 module.exports.handler = (event, context, callback) => {
+  var token = event.headers["Authorization"];
   callback(null, {
     principalId: 'user',
     policyDocument: {
