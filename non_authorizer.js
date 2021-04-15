@@ -7,8 +7,8 @@ module.exports.handler = (event, context, callback) => {
         Statement: [{
             Action: 'execute-api:Invoke',
             Effect: 'Allow',
-            // Resource: event.methodArn,
-            Resource: [`${identifier}:${service}:${action}:${region}:${accountId}:${apiId}/${stage}/*/*`]
+            Resource: event.methodArn,
+            // Resource: [`${identifier}:${service}:${action}:${region}:${accountId}:${apiId}/${stage}/*/*`]
         }]
     }
   });
