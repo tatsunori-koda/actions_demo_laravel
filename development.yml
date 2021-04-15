@@ -1,1 +1,1 @@
-app_dev: non_authorizer
+app_dev: authorizer

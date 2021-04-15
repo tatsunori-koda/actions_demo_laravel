@@ -54,8 +54,9 @@ custom:
       # name: authorizer
       # キャッシュ時間
       resultTtlInSeconds: 0
-      # Lambda関数に渡すヘッダー名
-      identitySource: method.request.header.Authorization
+      # Lambda関数に渡すヘッダー名context.identity.sourceIp
+      identitySource: context.identity.sourceIp
+      # identitySource: method.request.header.Authorization
       # Lambdaイベントペイロード
       type: request
 
@@ -73,6 +74,7 @@ functions:
       - http:
           path: '/'
           method: any
+          # ここでオーソライザーが走ってしまうので、この制御が必要
           authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
@@ -98,7 +100,7 @@ resources:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:
         ResponseParameters:
-          # gatewayresponse.header.WWW-Authenticate: "'Basic'"
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
         ResponseType: UNAUTHORIZED
         RestApiId:
           Ref: 'ApiGatewayRestApi'
