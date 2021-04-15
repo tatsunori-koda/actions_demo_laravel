@@ -55,7 +55,7 @@ custom:
       # キャッシュ時間
       resultTtlInSeconds: 0
       # Lambda関数に渡すヘッダー名
-      identitySource: method.request.header.Authorization
+      # identitySource: method.request.header.Authorization
       # Lambdaイベントペイロード
       type: request
 
