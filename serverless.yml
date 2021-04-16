@@ -1,18 +1,13 @@
 service: laravel-demo
 
-# laravel用のphpを動かすruntimeはこちら
-# provider:
-#   name: aws
-#   region: ap-northeast-1
-#   stage: dev
-#   runtime: provided.al2
-
-# オーソライザーはこちらで動く
+# オーソライザーが動作するruntime: nodejs10.x
+# laravel(PHP)を動作するruntime: provided.al2
+# 動作するruntimeが異なるのでここで指定しない(functionsの中で定義)
 provider:
   name: aws
   # runtime: nodejs10.x
   region: ap-northeast-1
-  stg: ${opt:stage}
+  stg: ${opt:stage, self:custom.defaultStage}
 
 plugins:
   - ./vendor/bref/bref
@@ -27,6 +22,7 @@ package:
 
 # 変数定義：オーソライザー用に追加　
 custom:
+  defaultStage: dev
   # definitions:
   # authorizer:
   # ${file}はyaml or json
@@ -54,9 +50,8 @@ custom:
       # name: authorizer
       # キャッシュ時間
       resultTtlInSeconds: 0
-      # Lambda関数に渡すヘッダー名context.identity.sourceIp
-      identitySource: context.identity.sourceIp
-      # identitySource: method.request.header.Authorization
+      # Lambda関数に渡すヘッダー名
+      identitySource: method.request.header.Authorization
       # Lambdaイベントペイロード
       type: request
 
@@ -74,7 +69,7 @@ functions:
       - http:
           path: '/'
           method: any
-          # ここでオーソライザーが走ってしまうので、この制御が必要
+          # TODO:ここでオーソライザーが走ってしまうので、この制御が必要
           authorizer: ${self:custom.definitions.authorizer}
 
   authorizer:
@@ -84,13 +79,6 @@ functions:
   non_authorizer:
     runtime: nodejs10.x
     handler: non_authorizer.handler
-
-  artisan:
-    handler: artisan
-    timeout: 120 # in seconds
-    layers:
-      - ${bref:layer.php-73} # PHP
-      - ${bref:layer.console} # The "console" layer
 
 # [AWSリソースの設定]APIGateWayにオーソライザーを設定
 # オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
