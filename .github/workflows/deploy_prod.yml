@@ -1,0 +1,70 @@
+name: Auto Deploy to AWS Lambda
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    name: Auto Deploy
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: composer install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm composer.lock
+          composer install -n --prefer-dist
+          composer require bref/bref
+          
+      - name: Copy .env
+        run: cp .env.deploy .env
+      - name: generate key
+        run: php artisan key:generate
+      - name: cache clear
+        run: php artisan cache:clear && php artisan route:clear
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Install Dependencies
+        run: |
+          npm install serverless -g
+          npm install
+
+      # Github -> setting ->Secretsにて設定
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Deploy to Lambda
+        run: sls deploy --stage prd
+      #     # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      # - name: Execute Lambda
+      #   run: sls invoke -f slack
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      # - name: Notify result to slack
+      #   uses: homoluctus/slatify@master
+      #   if: always()
+      #   with:
+      #     type: ${{ job.status }}
+      #     job_name: '*Deploy Lambda*'
+      #   env:
+      #     # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
