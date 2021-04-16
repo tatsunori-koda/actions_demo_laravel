@@ -54,7 +54,7 @@ custom:
       identitySource: method.request.header.Authorization
       # Lambdaイベントペイロード
       type: request
-
+      
 functions:
   website:
     runtime: provided.al2
