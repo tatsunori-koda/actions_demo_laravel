@@ -32,6 +32,8 @@ custom:
     basePath: ''
     stage: ${self:provider.stg}
     createRoute53Record: true
+    endpointType: 'edge'
+    hostedZoneId: Z02528722C7SEJ9CX1UX2
     # securityPolicy: tls_1_2
     # apiType: rest
     # autoDomain: false
