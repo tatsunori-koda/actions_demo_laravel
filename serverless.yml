@@ -12,6 +12,7 @@ provider:
 plugins:
   - ./vendor/bref/bref
   - serverless-plugin-ifelse
+  - serverless-domain-manager
 
 package:
   exclude:
