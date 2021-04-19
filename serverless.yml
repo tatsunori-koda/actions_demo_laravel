@@ -25,16 +25,16 @@ package:
 custom:
   # カスタムドメインの設定
   customDomain:
-    domainName: laravel-demo.tk
+    domainName: 'laravel-demo.tk'
     certificateName: 'laravel-demo.tk'
     # domainName: '${self:provider.stg}.koshikawa.net'
     # certificateName: '*.koshikawa.net'
     basePath: ''
     stage: ${self:provider.stg}
     createRoute53Record: true
-    securityPolicy: tls_1_2
-    apiType: rest
-    autoDomain: false
+    # securityPolicy: tls_1_2
+    # apiType: rest
+    # autoDomain: false
 
   defaultStage: dev
 
