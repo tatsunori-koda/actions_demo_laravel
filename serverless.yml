@@ -23,7 +23,21 @@ package:
 
 # 変数定義
 custom:
+  # カスタムドメインの設定
+  customDomain:
+    domainName: laravel-demo.tk
+    certificateName: 'laravel-demo.tk'
+    # domainName: '${self:provider.stg}.koshikawa.net'
+    # certificateName: '*.koshikawa.net'
+    basePath: ''
+    stage: ${self:provider.stg}
+    createRoute53Record: true
+    securityPolicy: tls_1_2
+    apiType: rest
+    autoDomain: false
+
   defaultStage: dev
+
   definitions:
     authorizer:
       # Lambda関数名（basic認証しない時はauthorizer以外を指定し、同じ名前のファンクションを用意する）
@@ -36,16 +50,7 @@ custom:
       # Lambdaイベントペイロード
       type: request
 
-  # カスタムドメインの設定
-  name: laravel-demo-domain
-  customDomain:
-    domainName: 'laravel-demo.tk'
-    certificateName: 'laravel-demo.tk'
-    # domainName: '${self:provider.stg}.koshikawa.net'
-    # certificateName: '*.koshikawa.net'
-    basePath: ''
-    stage: ${self:provider.stg}
-    createRoute53Record: true
+  
       
 functions:
   website:
