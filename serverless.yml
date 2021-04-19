@@ -1,4 +1,4 @@
-service: laravel-demo
+service: laravel-with-basic
 
 # オーソライザーが動作するruntime: nodejs10.x
 # laravel(PHP)を動作するruntime: provided.al2
@@ -20,29 +20,9 @@ package:
     - storage/**
     - tests/**
 
-# 変数定義：オーソライザー用に追加　
+# 変数定義
 custom:
   defaultStage: dev
-  # definitions:
-  # authorizer:
-  # ${file}はyaml or json
-  # serverlessIfElse:
-  #   - If: '"${file(./development.yml):app_dev}" == "local"'
-  #     Set:
-  #       authorizer:
-  #         # Lambdaオーソライザーの設定
-  #         # Lambda関数名（functionsのnameと一致させる必要あり）
-  #         name: authorizer
-  #         # キャッシュ時間
-  #         resultTtlInSeconds: 0
-  #         # Lambda関数に渡すヘッダー名
-  #         identitySource: method.request.header.Authorization
-  #         # Lambdaイベントペイロード
-  #         type: request
-  #     ElseSet:
-  #       authorizer:
-  #         # 何もしない。とりあえずartisan
-  #         name: artisan
   definitions:
     authorizer:
       # Lambda関数名（basic認証しない時はauthorizer以外を指定し、同じ名前のファンクションを用意する）
@@ -54,34 +34,44 @@ custom:
       identitySource: method.request.header.Authorization
       # Lambdaイベントペイロード
       type: request
+
+  # カスタムドメインの設定
+  name: laravel-demo-domain
+  customDomain:
+    domainName: 'laravel-demo.tk'
+    certificateName: 'laravel-demo.tk'
+    # domainName: '${self:provider.stg}.koshikawa.net'
+    # certificateName: '*.koshikawa.net'
+    basePath: ''
+    stage: ${self:provider.stg}
+    createRoute53Record: true
       
 functions:
   website:
     runtime: provided.al2
     handler: public/index.php
-    # handler: handler.hello
-    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    timeout: 28
     layers:
       - ${bref:layer.php-73-fpm}
     events: # アクセス時に呼ばれるファンクション
-      # - http: 'ANY /'
-      # - http: 'ANY /{proxy+}'
       - http:
           path: '/'
           method: any
-          # TODO:ここでオーソライザーが走ってしまうので、この制御が必要
+          # TODO:ここでオーソライザーが走ってしまうので、この設定の有無を切り替えられるのがベスト
           authorizer: ${self:custom.definitions.authorizer}
 
+  # basic認証時に走る
   authorizer:
     runtime: nodejs10.x
     handler: authorizer.handler
 
+  # basci認証させたくないときに走らせる
   non_authorizer:
     runtime: nodejs10.x
     handler: non_authorizer.handler
 
 # [AWSリソースの設定]APIGateWayにオーソライザーを設定
-# オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定です
+# オーソライザが401を返したときに「WWW-Authenticate」ヘッダを返却させるための設定
 resources:
   Resources:
     GatewayResponse:
