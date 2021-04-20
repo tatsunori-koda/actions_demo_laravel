@@ -25,15 +25,15 @@ package:
 custom:
   # カスタムドメインの設定
   customDomain:
-    domainName: "laravel-demo.tk"
+    domainName: laravel-demo.tk
     certificateName: laravel-demo.tk
     basePath: ''
     stage: ${self:provider.stg}
     createRoute53Record: true
-    # endpointType: 'regional'
-    # hostedZoneId: Z02528722C7SEJ9CX1UX2
-    # securityPolicy: tls_1_2
-    certificateArn: 'arn:aws:acm:us-east-1:373258578429:certificate/c206d2b9-3b7b-4b07-a9d1-9fd1eebcca96'
+    endpointType: 'regional'
+    hostedZoneId: Z02528722C7SEJ9CX1UX2
+    securityPolicy: tls_1_2
+    # certificateArn: 'arn:aws:acm:us-east-1:373258578429:certificate/c206d2b9-3b7b-4b07-a9d1-9fd1eebcca96'
     enabled: true
     # domainName: '${self:provider.stg}.koshikawa.net'
     # certificateName: '*.koshikawa.net'
