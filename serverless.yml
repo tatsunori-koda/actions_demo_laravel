@@ -40,7 +40,6 @@ custom:
     # apiType: rest
     # autoDomain: false
     
-
   defaultStage: dev
 
   definitions:
